@@ -20,3 +20,4 @@ def lambda_handler(event, context):
         obj = s3.get_object(Bucket=bucket,Key=key)
         body = obj['Body'].read()
         print(body)
+        print("hello")
