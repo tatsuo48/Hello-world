@@ -19,4 +19,4 @@ def lambda_handler(event, context):
         print ("key:" + key)
         obj = s3.get_object(Bucket=bucket,Key=key)
         body = obj['Body'].read()
-        f = 
+        print(body)
