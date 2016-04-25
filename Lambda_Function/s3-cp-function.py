@@ -36,9 +36,9 @@ def lambda_handler(event, context):
 
                     t.add_resource(VPC(
                                 "VPC"+str(i),
-                                EnableDnsSupport=dns,
+                                EnableDnsSupport="true",
                                 CidrBlock=address,
-                                EnableDnsHostnames="true",
+                                EnableDnsHostnames=dns,
                                 Tags=Tags(
                                                  Name="VPC"+str(i)
                                             )
