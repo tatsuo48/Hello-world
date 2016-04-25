@@ -5,6 +5,8 @@ import urllib
 import boto3
 from troposphere import Ref, Tags,Template
 from troposphere.ec2 import VPC
+from datetime import datetime
+basename = datetime.now().strftime("%Y%m%d-%H%M%S")
 
 print('Loading function')
 
@@ -44,7 +46,7 @@ def lambda_handler(event, context):
 
                     json_template = t.to_json()
                     bucket = s3.Bucket('yokoyama-config')
-                    obj = bucket.Object('json-template.txt')
+                    obj = bucket.Object('json-template-' + basename + ' .txt')
                     response = obj.put(
                             Body=json_template.encode('utf-8'),
                             ContentEncoding='utf-8',
