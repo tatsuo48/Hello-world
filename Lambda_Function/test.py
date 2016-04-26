@@ -36,12 +36,12 @@ def lambda_handler(event, context):
         t.add_description("ROOP&ROOP")
         if len(VPC_CidrBlockList) > 1:
             for (address,dns,value) in zip(VPC_CidrBlockList[1:],VPC_EnableDnsSupportList[1:],VPC_TagsValueList[1:]):
-                print(value)
                 t.add_resource(VPC(
                               value,
                               EnableDnsSupport="true",
                               CidrBlock=address,
-                              EnableDnsHostnames=dns
+                              EnableDnsHostnames=dns,
+
                 ))
         json_template = t.to_json()
         bucket = s3.Bucket('cf-templates-hokan')
