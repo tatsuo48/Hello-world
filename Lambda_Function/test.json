@@ -11,12 +11,12 @@
 			            "object": {
 					          "eTag": "0123456789abcdef0123456789abcdef",
 					          "sequencer": "0A1B2C3D4E5F678901",
-					          "key": "test.txt",
+					          "key": "cFn-test/tekitou.txt",
 					          "size": 18868
 					        },
 			            "bucket": {
-					          "arn": "arn:aws:s3:::yokoyama-norihumi",
-					          "name": "yokoyama-norihumi",
+					          "arn": "arn:aws:s3:::test-yokoyama",
+					          "name": "test-yokoyama",
 					          "ownerIdentity": {
 						                  "principalId": "EXAMPLE"
 						                }
