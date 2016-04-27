@@ -4,6 +4,7 @@ from __future__ import print_function
 import json
 import urllib
 import boto3
+import string
 from troposphere import Ref, Tags,Template
 from troposphere.ec2 import VPC,Subnet,InternetGateway,VPNGateway,CustomerGateway,VPCGatewayAttachment,\
 DHCPOptions,VPCDHCPOptionsAssociation,RouteTable,Route,SubnetRouteTableAssociation,NetworkAcl,NetworkAclEntry,\
@@ -116,7 +117,7 @@ def lambda_handler(event, context):
         if len(VPC_CidrBlockList) > 1:
             for (address,dns,value) in zip(VPC_CidrBlockList[1:],VPC_EnableDnsHostnamesList[1:],VPC_TagsValueList[1:]):
                 t.add_resource(VPC(
-                              value,
+                              value.translate(string.maketrans("", ""), "-_"),
                               EnableDnsSupport="true",
                               CidrBlock=address,
                               EnableDnsHostnames=dns,
@@ -129,11 +130,11 @@ def lambda_handler(event, context):
             for (address,az,pip,value,vpcid) in zip(Subnet_CidrBlockList[1:],Subnet_AzList[1:],Subnet_MapPublicIpOnLaunchList[1:],\
                                                     Subnet_TagsValueList[1:],Subnet_VpcIdList[1:]):
                 t.add_resource(Subnet(
-                              value,
+                              value.translate(string.maketrans("", ""), "-_")
                               CidrBlock=address,
                               AvailabilityZone=az,
                               MapPublicIpOnLaunch=pip,
-                              VpcId=Ref(vpcid),
+                              VpcId=Ref(vpcid.translate(string.maketrans("", ""), "-_")),
                               Tags=Tags(
                                        Name=value
                               )
