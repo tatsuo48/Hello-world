@@ -114,7 +114,7 @@ def lambda_handler(event, context):
         t.add_description("ROOP&ROOP")
         # u'VPCの作成'
         if len(VPC_CidrBlockList) > 1:
-            for (address,dns,value) in zip(VPC_CidrBlockList[1:],VPC_EnableDnsSupportList[1:],VPC_TagsValueList[1:]):
+            for (address,dns,value) in zip(VPC_CidrBlockList[1:],VPC_EnableDnsHostnamesList[1:],VPC_TagsValueList[1:]):
                 t.add_resource(VPC(
                               value,
                               EnableDnsSupport="true",
@@ -127,7 +127,7 @@ def lambda_handler(event, context):
         # u'サブネットの作成'
         if len(Subnet_CidrBlockList) > 1:
             for (address,az,pip,value,vpcid) in zip(Subnet_CidrBlockList[1:],Subnet_AzList[1:],Subnet_MapPublicIpOnLaunchList[1:],\
-                                                    Subnet_TagsValueList[1:],Subnet_VpcIdlist[1:]):
+                                                    Subnet_TagsValueList[1:],Subnet_VpcIdList[1:]):
                 t.add_resource(Subnet(
                               value,
                               CidrBlock=address,
