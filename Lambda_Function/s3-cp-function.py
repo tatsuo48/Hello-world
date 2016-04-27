@@ -7,7 +7,7 @@ import boto3
 from troposphere import Ref, Tags,Template
 from troposphere.ec2 import VPC,Subnet,InternetGateway,VPNGateway,CustomerGateway,VPCGatewayAttachment,\
 DHCPOptions,VPCDHCPOptionsAssociation,RouteTable,Route,SubnetRouteTableAssociation,NetworkAcl,NetworkAclEntry,\
-SubnetNetworkAclAssociation,SecurityGroup,SecurityGroupIngress,SecurityGroupEgress
+SubnetNetworkAclAssociation,SecurityGroup,SecurityGroupIngress,SecurityGroupEgress,PortRange
 
 from datetime import datetime
 basename = datetime.now().strftime("%Y%m%d-%H%M%S")
