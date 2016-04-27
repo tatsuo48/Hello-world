@@ -26,7 +26,7 @@ AWS_REGION = 'AWS::Region'
 AWS_STACK_ID = 'AWS::StackId'
 AWS_STACK_NAME = 'AWS::StackName'
 
-valid_names = re.compile(r'^[a-zA-Z0-9-_]+$')
+valid_names = re.compile(r'^[a-zA-Z0-9]+$')
 
 
 class BaseAWSObject(object):
