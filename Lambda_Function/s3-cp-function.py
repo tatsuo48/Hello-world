@@ -130,7 +130,7 @@ def lambda_handler(event, context):
             for (address,az,pip,value,vpcid) in zip(Subnet_CidrBlockList[1:],Subnet_AzList[1:],Subnet_MapPublicIpOnLaunchList[1:],\
                                                     Subnet_TagsValueList[1:],Subnet_VpcIdList[1:]):
                 t.add_resource(Subnet(
-                              value.translate(string.maketrans("", ""), "-_")
+                              value.translate(string.maketrans("", ""), "-_"),
                               CidrBlock=address,
                               AvailabilityZone=az,
                               MapPublicIpOnLaunch=pip,
@@ -143,7 +143,7 @@ def lambda_handler(event, context):
         if len(InternetGateway_TagsValueList) > 1:
             for (value) in (InternetGateway_TagsValueList[1:]):
                 t.add_resource(InternetGateway(
-                              value,
+                              value.translate(string.maketrans("", ""), "-_"),
                               Tags=Tags(
                                        Name=value
                               )
@@ -151,7 +151,7 @@ def lambda_handler(event, context):
         if len(CustomerGateway_TagsValueList) > 1:
             for (value,ipaddress,bgpasn) in zip(CustomerGateway_TagsValueList[1:],CustomerGateway_IpAddressList[1:],CustomerGateway_BgpAsnList[1:]):
                 t.add_resource(CustomerGateway(
-                              value,
+                              value.translate(string.maketrans("", ""), "-_"),
                               Type="ipsec.1",
                               IpAddress=ipaddress,
                               BgpAsn=bgpasn,
@@ -162,7 +162,7 @@ def lambda_handler(event, context):
         if len(VPNGateway_TagsValueList) > 1:
             for (value) in (VPNGateway_TagsValueList[1:]):
                 t.add_resource(VPNGateway(
-                              value,
+                              value.translate(string.maketrans("", ""), "-_"),
                               Type="ipsec.1",
                               Tags=Tags(
                                        Name=value
@@ -173,21 +173,21 @@ def lambda_handler(event, context):
             for i,(gatewayid,vpcid) in enumerate(zip(VPCGatewayAttachment_InternetGatewayIdList[1:],VPCGatewayAttachment_VpcId_IGList[1:])):
                 t.add_resource(VPCGatewayAttachment(
                               "VPCGatewayAttachmentInternetGateway"+str(i),
-                              InternetGatewayId=Ref(gatewayid),
-                              VpcId=Ref(vpcid)
+                              InternetGatewayId=Ref(gatewayid.translate(string.maketrans("", ""), "-_")),
+                              VpcId=Ref(vpcid.translate(string.maketrans("", ""), "-_"))
                 ))
         if len(VPCGatewayAttachment_VpnGatewayIdList) > 1:
             for i,(gatewayid,vpcid) in enumerate(zip(VPCGatewayAttachment_VpnGatewayIdList[1:],VPCGatewayAttachment_VpcId_VPNList[1:])):
                 t.add_resource(VPCGatewayAttachment(
                               "VPCGatewayAttachmentVPNGateway"+str(i),
-                              VpnGatewayId=Ref(gatewayid),
-                              VpcId=Ref(vpcid)
+                              VpnGatewayId=Ref(gatewayid.translate(string.maketrans("", ""), "-_")),
+                              VpcId=Ref(vpcid.translate(string.maketrans("", ""), "-_"))
                 ))
         # u'DHCPオプションの作成'
         if len(DHCPOptions_DomainNameList) > 1:
             for (domainname,value) in zip(DHCPOptions_DomainNameList[1:],DHCPOptions_ValueList[1:]):
                 t.add_resource(DHCPOptions(
-                              value,
+                              value.translate(string.maketrans("", ""), "-_"),
                               DomainName=domainname,
                               DomainNameServers=["AmazonProvidedDNS"]
                 ))
@@ -196,15 +196,15 @@ def lambda_handler(event, context):
             for i,(dhcpoptionid,vpcid) in enumerate(zip(VPCDHCPOptionsAssociation_DhcpOptionsIdList[1:],VPCDHCPOptionsAssociation_VpcIdList[1:])):
                 t.add_resource(VPCDHCPOptionsAssociation(
                               "VPCDHCPOptionsAssociation" + str(i),
-                              DhcpOptionsId=Ref(dhcpoptionid),
-                              VpcId=vpcid
+                              DhcpOptionsId=Ref(dhcpoptionid.translate(string.maketrans("", ""), "-_")),
+                              VpcId=Ref(vpcid.translate(string.maketrans("", ""), "-_")),
                 ))
         # u'ルートテーブルの作成'
         if len(RouteTable_VpcIdList) > 1:
             for (vpcid,value) in zip(RouteTable_VpcIdList[1:],RouteTable_TagsValueList[1:]):
                 t.add_resource(RouteTable(
-                              value,
-                              VpcId=Ref(vpcid),
+                              value.translate(string.maketrans("", ""), "-_"),
+                              VpcId=Ref(vpcid.translate(string.maketrans("", ""), "-_")),
                               Tags=Tags(
                                        Name=value
                               )
@@ -215,23 +215,23 @@ def lambda_handler(event, context):
                 t.add_resource(Route(
                               "RouteGatewayId" + str(i),
                               DestinationCidrBlock="0.0.0.0/0",
-                              GatewayId=Ref(gatewayid),
-                              RouteTableId=Ref(routetable)
+                              GatewayId=Ref(gatewayid.translate(string.maketrans("", ""), "-_")),
+                              RouteTableId=Ref(routetable.translate(string.maketrans("", ""), "-_"))
                 ))
         # u'サブネットへのルートテーブルの関連付け'
         if len(SubnetRouteTableAssociation_RouteTableIdList) > 1:
             for i,(routetableid,subnetid) in enumerate(zip(SubnetRouteTableAssociation_RouteTableIdList[1:],SubnetRouteTableAssociation_SubnetIdList[1:])):
                 t.add_resource(SubnetRouteTableAssociation(
                               "SubnetRouteTableAssociation" + str(i),
-                              RouteTableId=Ref(routetableid),
-                              SubnetId=Ref(subnetid)
+                              RouteTableId=Ref(routetableid.translate(string.maketrans("", ""), "-_")),
+                              SubnetId=Ref(subnetid.translate(string.maketrans("", ""), "-_"))
                 ))
         # u'ネットワークACLの作成'
         if len(NetworkAcl_TagsValueList) > 1:
             for (value,vpcid) in zip(NetworkAcl_TagsValueList[1:],NetworkAcl_VpcIdList[1:]):
                 t.add_resource(NetworkAcl(
-                              value,
-                              VpcId=Ref(vpcid),
+                              value.translate(string.maketrans("", ""), "-_"),
+                              VpcId=Ref(vpcid.translate(string.maketrans("", ""), "-_")),
                               Tags=Tags(
                                        Name=value
                               )
@@ -246,7 +246,7 @@ def lambda_handler(event, context):
                               "NetworkAclEntry" + str(i),
                               CidrBlock=cidr,
                               Egress=egress,
-                              NetworkAclId=Ref(naclid),
+                              NetworkAclId=Ref(naclid.translate(string.maketrans("", ""), "-_")),
                               PortRange=PortRange(
                                        From=pfrom,
                                        To=pto
@@ -260,16 +260,16 @@ def lambda_handler(event, context):
             for i,(subnetid,naclid) in enumerate(zip(SubnetNetworkAclAssociation_SubnetIdList[1:],SubnetNetworkAclAssociation_NetworkAclIdList[1:])):
                 t.add_resource(SubnetNetworkAclAssociation(
                               "SubnetNetworkAclAssociation" + str(i),
-                              SubnetId=Ref(subnetid),
-                              NetworkAclId=Ref(naclid)
+                              SubnetId=Ref(subnetid.translate(string.maketrans("", ""), "-_")),
+                              NetworkAclId=Ref(naclid.translate(string.maketrans("", ""), "-_"))
                 ))
         # 'セキュリティグループの作成'
         if len(SecurityGroup_TagsValueList) > 1:
             for (value,description,vpcid) in zip(SecurityGroup_TagsValueList[1:],SecurityGroup_GroupDescriptionList[1:],SecurityGroup_VpcIdList[1:]):
                 t.add_resource(SecurityGroup(
-                              value,
+                              value.translate(string.maketrans("", ""), "-_"),
                               GroupDescription=description,
-                              VpcId=Ref(vpcid),
+                              VpcId=Ref(vpcid.translate(string.maketrans("", ""), "-_")),
                               Tags=Tags(
                                        Name=value
                               )
@@ -279,11 +279,11 @@ def lambda_handler(event, context):
             for i,(cidr,pfrom,pto,sgid,protocol) in enumerate(zip(SGIngressIP_CidrIpList[1:],SGIngressIP_FromPortList[1:],SGIngressIP_ToPortList[1:],\
                                                                   SGIngressIP_GroupIdList[1:],SGIngressIP_IpProtocolList[1:])):
                 t.add_resource(SecurityGroupIngress(
-                              "SecurityGroupIngress_IP" + str(i),
+                              "SecurityGroupIngressIP" + str(i),
                               CidrIp=cidr,
                               FromPort=pfrom,
                               ToPort=pto,
-                              GroupId=sgid,
+                              GroupId=Ref(sgid.translate(string.maketrans("", ""), "-_")),
                               IpProtocol=protocol
                 ))
         # 'セキュリティグループへのインバウンドルールの設定_ソースにセキュリティグループを指定'
@@ -291,23 +291,23 @@ def lambda_handler(event, context):
             for i,(pfrom,pto,sgid,protocol,sourcesgid) in enumerate(zip(SGIngressSG_FromPortList[1:],SGIngressSG_ToPortList[1:],SGIngressSG_GroupIdList[1:],\
                                                                         SGIngressSG_IpProtocolList[1:],SGIngressSG_SourceSecurityGroupIdList[1:])):
                 t.add_resource(SecurityGroupIngress(
-                              "SecurityGroupIngress_SG" + str(i),
+                              "SecurityGroupIngressSG" + str(i),
                               FromPort=pfrom,
                               ToPort=pto,
-                              GroupId=sgid,
+                              GroupId=Ref(sgid.translate(string.maketrans("", ""), "-_")),
                               IpProtocol=protocol,
-                              SourceSecurityGroupId=sourcesgid
+                              SourceSecurityGroupId=Ref(sourcesgid.translate(string.maketrans("", ""), "-_"))
                 ))
         # 'セキュリティグループへのアウトバウンドルールの設定_宛先にIPを指定'
         if len(SGEgressIP_CidrIpList) > 1:
             for i,(cidr,pfrom,pto,sgid,protocol) in enumerate(zip(SGEgressIP_CidrIpList[1:],SGEgressIP_FromPortList[1:],SGEgressIP_ToPortList[1:],\
                                                                   SGEgressIP_GroupIdList[1:],SGEgressIP_IpProtocolList[1:])):
                 t.add_resource(SecurityGroupEgress(
-                              "SecurityGroupEgress_IP" + str(i),
+                              "SecurityGroupEgressIP" + str(i),
                               CidrIp=cidr,
                               FromPort=pfrom,
                               ToPort=pto,
-                              GroupId=sgid,
+                              GroupId=Ref(sgid.translate(string.maketrans("", ""), "-_")),
                               IpProtocol=protocol
                 ))
         # 'セキュリティグループへのアウトバウンドルールの設定_宛先にセキュリティグループを指定'
@@ -315,12 +315,12 @@ def lambda_handler(event, context):
             for i,(pfrom,pto,sgid,protocol,distsgid) in enumerate(zip(SGEgressSG_FromPortList[1:],SGEgressSG_ToPortList[1:],SGEgressSG_GroupIdList[1:],\
                                                                       SGEgressSG_IpProtocolList[1:],SGEgressSG_DestinationSecurityGroupIdList[1:])):
                 t.add_resource(SecurityGroupEgress(
-                              "SecurityGroupEgress_SG" + str(i),
+                              "SecurityGroupEgressSG" + str(i),
                               FromPort=pfrom,
                               ToPort=pto,
-                              GroupId=sgid,
+                              GroupId=Ref(sgid.translate(string.maketrans("", ""), "-_")),
                               IpProtocol=protocol,
-                              DestinationSecurityGroupId=distsgid
+                              DestinationSecurityGroupId=Ref(distsgid.translate(string.maketrans("", ""), "-_"))
                 ))
         json_template = t.to_json()
         bucket = s3.Bucket('cf-templates-hokan')
