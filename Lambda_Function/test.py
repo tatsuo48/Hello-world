@@ -41,6 +41,7 @@ def lambda_handler(event, context):
                               EnableDnsSupport="true",
                               CidrBlock=address,
                               EnableDnsHostnames=dns,
+                              Tags=Tags(Name=value)
 
                 ))
         json_template = t.to_json()
