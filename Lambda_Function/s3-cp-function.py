@@ -52,62 +52,63 @@ def lambda_handler(event, context):
         VPCGatewayAttachment_VpcId_VPNList = body_list[16].split(',')
         # u'DHCPオプションの作成'
         DHCPOptions_DomainNameList = body_list[17].split(',')
-        DHCPOptions_ValueList = body_list[18].split(',')
+        DHCPOptions_DomainNameServersList = body_list[18].split(',')
+        DHCPOptions_ValueList = body_list[19].split(',')
         # u'VPCへのDHCPオプションの関連付け'
-        VPCDHCPOptionsAssociation_DhcpOptionsIdList = body_list[19].split(',')
-        VPCDHCPOptionsAssociation_VpcIdList = body_list[20].split(',')
+        VPCDHCPOptionsAssociation_DhcpOptionsIdList = body_list[20].split(',')
+        VPCDHCPOptionsAssociation_VpcIdList = body_list[21].split(',')
         # u'ルートテーブルの作成'
-        RouteTable_VpcIdList = body_list[21].split(',')
-        RouteTable_TagsValueList = body_list[22].split(',')
+        RouteTable_VpcIdList = body_list[22].split(',')
+        RouteTable_TagsValueList = body_list[23].split(',')
         # u'ルートテーブルへのGatewayの関連付け'
-        Route_GatewayIdList = body_list[23].split(',')
-        Route_RouteTableId_GWList = body_list[24].split(',')
+        Route_GatewayIdList = body_list[24].split(',')
+        Route_RouteTableId_GWList = body_list[25].split(',')
         # u'サブネットへのルートテーブルの関連付け'
-        SubnetRouteTableAssociation_RouteTableIdList = body_list[25].split(',')
-        SubnetRouteTableAssociation_SubnetIdList = body_list[26].split(',')
+        SubnetRouteTableAssociation_RouteTableIdList = body_list[26].split(',')
+        SubnetRouteTableAssociation_SubnetIdList = body_list[27].split(',')
         # u'ネットワークACLの作成'
-        NetworkAcl_TagsValueList = body_list[27].split(',')
-        NetworkAcl_VpcIdList = body_list[28].split(',')
+        NetworkAcl_TagsValueList = body_list[28].split(',')
+        NetworkAcl_VpcIdList = body_list[29].split(',')
         # 'ネットワークACLへのルールの追加'
-        NetworkAclEntry_CidrBlockList = body_list[29].split(',')
-        NetworkAclEntry_EgressList = body_list[30].split(',')
-        NetworkAclEntry_NetworkAclIdList = body_list[31].split(',')
-        NetworkAclEntry_PortRangeFromList = body_list[32].split(',')
-        NetworkAclEntry_PortRangeToList = body_list[33].split(',')
-        NetworkAclEntry_ProtocolList = body_list[34].split(',')
-        NetworkAclEntry_RuleActionList = body_list[35].split(',')
-        NetworkAclEntry_RuleNumberList = body_list[36].split(',')
+        NetworkAclEntry_CidrBlockList = body_list[30].split(',')
+        NetworkAclEntry_EgressList = body_list[31].split(',')
+        NetworkAclEntry_NetworkAclIdList = body_list[32].split(',')
+        NetworkAclEntry_PortRangeFromList = body_list[33].split(',')
+        NetworkAclEntry_PortRangeToList = body_list[34].split(',')
+        NetworkAclEntry_ProtocolList = body_list[35].split(',')
+        NetworkAclEntry_RuleActionList = body_list[36].split(',')
+        NetworkAclEntry_RuleNumberList = body_list[37].split(',')
         # 'サブネットへのネットワークACLの関連付け'
-        SubnetNetworkAclAssociation_SubnetIdList = body_list[37].split(',')
-        SubnetNetworkAclAssociation_NetworkAclIdList = body_list[38].split(',')
+        SubnetNetworkAclAssociation_SubnetIdList = body_list[38].split(',')
+        SubnetNetworkAclAssociation_NetworkAclIdList = body_list[39].split(',')
         # 'セキュリティグループの作成'
-        SecurityGroup_TagsValueList = body_list[39].split(',')
-        SecurityGroup_GroupDescriptionList = body_list[40].split(',')
-        SecurityGroup_VpcIdList = body_list[41].split(',')
+        SecurityGroup_TagsValueList = body_list[40].split(',')
+        SecurityGroup_GroupDescriptionList = body_list[41].split(',')
+        SecurityGroup_VpcIdList = body_list[42].split(',')
         # 'セキュリティグループへのインバウンドルールの設定_ソースにIPを指定'
-        SGIngressIP_CidrIpList = body_list[42].split(',')
-        SGIngressIP_FromPortList = body_list[43].split(',')
-        SGIngressIP_ToPortList = body_list[44].split(',')
-        SGIngressIP_GroupIdList = body_list[45].split(',')
-        SGIngressIP_IpProtocolList = body_list[46].split(',')
+        SGIngressIP_CidrIpList = body_list[43].split(',')
+        SGIngressIP_FromPortList = body_list[44].split(',')
+        SGIngressIP_ToPortList = body_list[45].split(',')
+        SGIngressIP_GroupIdList = body_list[46].split(',')
+        SGIngressIP_IpProtocolList = body_list[47].split(',')
         # 'セキュリティグループへのインバウンドルールの設定_ソースにセキュリティグループを指定'
-        SGIngressSG_FromPortList = body_list[47].split(',')
-        SGIngressSG_ToPortList = body_list[48].split(',')
-        SGIngressSG_GroupIdList = body_list[49].split(',')
-        SGIngressSG_IpProtocolList = body_list[50].split(',')
-        SGIngressSG_SourceSecurityGroupIdList = body_list[51].split(',')
+        SGIngressSG_FromPortList = body_list[48].split(',')
+        SGIngressSG_ToPortList = body_list[49].split(',')
+        SGIngressSG_GroupIdList = body_list[50].split(',')
+        SGIngressSG_IpProtocolList = body_list[51].split(',')
+        SGIngressSG_SourceSecurityGroupIdList = body_list[52].split(',')
         # 'セキュリティグループへのアウトバウンドルールの設定_宛先にIPを指定'
-        SGEgressIP_CidrIpList = body_list[52].split(',')
-        SGEgressIP_FromPortList = body_list[53].split(',')
-        SGEgressIP_ToPortList = body_list[54].split(',')
-        SGEgressIP_GroupIdList = body_list[55].split(',')
-        SGEgressIP_IpProtocolList = body_list[56].split(',')
+        SGEgressIP_CidrIpList = body_list[53].split(',')
+        SGEgressIP_FromPortList = body_list[54].split(',')
+        SGEgressIP_ToPortList = body_list[55].split(',')
+        SGEgressIP_GroupIdList = body_list[56].split(',')
+        SGEgressIP_IpProtocolList = body_list[57].split(',')
         # 'セキュリティグループへのアウトバウンドルールの設定_宛先にセキュリティグループを指定'
-        SGEgressSG_FromPortList = body_list[57].split(',')
-        SGEgressSG_ToPortList = body_list[58].split(',')
-        SGEgressSG_GroupIdList = body_list[59].split(',')
-        SGEgressSG_IpProtocolList = body_list[60].split(',')
-        SGEgressSG_DestinationSecurityGroupIdList = body_list[61].split(',')
+        SGEgressSG_FromPortList = body_list[58].split(',')
+        SGEgressSG_ToPortList = body_list[59].split(',')
+        SGEgressSG_GroupIdList = body_list[60].split(',')
+        SGEgressSG_IpProtocolList = body_list[61].split(',')
+        SGEgressSG_DestinationSecurityGroupIdList = body_list[62].split(',')
 
 
         t = Template()
@@ -185,11 +186,14 @@ def lambda_handler(event, context):
                 ))
         # u'DHCPオプションの作成'
         if len(DHCPOptions_DomainNameList) > 1:
-            for (domainname,value) in zip(DHCPOptions_DomainNameList[1:],DHCPOptions_ValueList[1:]):
+            for (domainname,domainnameservers,value,) in zip(DHCPOptions_DomainNameList[1:],DHCPOptions_DomainNameServersList[1:],DHCPOptions_ValueList[1:]):
                 t.add_resource(DHCPOptions(
                               value.translate(string.maketrans("", ""), "-_"),
                               DomainName=domainname,
-                              DomainNameServers=["AmazonProvidedDNS"]
+                              DomainNameServers=['"' + domainnameservers + '"']
+                              Tags=Tags(
+                                       Name=value
+                              )
                 ))
         # u'VPCへのDHCPオプションの関連付け'
         if len(VPCDHCPOptionsAssociation_DhcpOptionsIdList) > 1:
