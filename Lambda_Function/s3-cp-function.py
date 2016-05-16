@@ -190,7 +190,7 @@ def lambda_handler(event, context):
                 t.add_resource(DHCPOptions(
                               value.translate(string.maketrans("", ""), "-_"),
                               DomainName=domainname,
-                              DomainNameServers=['"' + domainnameservers + '"']
+                              DomainNameServers=['"' + domainnameservers + '"'],
                               Tags=Tags(
                                        Name=value
                               )
