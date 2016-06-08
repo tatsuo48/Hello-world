@@ -5,116 +5,45 @@ import json
 import urllib
 import boto3
 import string
+from datetime import datetime
 from troposphere import Ref, Tags,Template
 from troposphere.ec2 import VPC,Subnet,InternetGateway,VPNGateway,CustomerGateway,VPCGatewayAttachment,\
 DHCPOptions,VPCDHCPOptionsAssociation,RouteTable,Route,SubnetRouteTableAssociation,NetworkAcl,NetworkAclEntry,\
 SubnetNetworkAclAssociation,SecurityGroup,SecurityGroupIngress,SecurityGroupEgress,PortRange
 
-from datetime import datetime
-basename = datetime.now().strftime("%Y%m%d-%H%M%S")
+BASENAME = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+SAVE_BUCKET='cf-templates-hokan'
 
 print('Loading function')
 
 s3 = boto3.resource('s3')
 
 def lambda_handler(event, context):
-        #print("Received event: " + json.dumps(event, indent=2))
+        print("Received event: " + json.dumps(event, indent=2))
 
-        # Get the object from the event and show its content type
+        # lambda_handlerに渡されたイベントからｓ３バケットとキーを取り出してｓ３オブジェクトをgetする。
         bucket = event['Records'][0]['s3']['bucket']['name']
         key = urllib.unquote_plus(event['Records'][0]['s3']['object']['key']).decode('utf8')
         print ("buket:" + bucket)
         print ("key:" + key)
         obj = s3.Object(bucket,key)
         response= obj.get()
-        body = response['Body'].read()
-        body_list= body.splitlines()
-        # u'VPCの作成'
-        VPC_CidrBlockList = body_list[0].split(',')
-        VPC_EnableDnsHostnamesList = body_list[1].split(',')
-        VPC_TagsValueList = body_list[2].split(',')
-        # u'サブネットの作成'
-        Subnet_CidrBlockList = body_list[3].split(',')
-        Subnet_AzList = body_list[4].split(',')
-        Subnet_MapPublicIpOnLaunchList = body_list[5].split(',')
-        Subnet_TagsValueList = body_list[6].split(',')
-        Subnet_VpcIdList = body_list[7].split(',')
-        # u'各種GateWayの作成
-        InternetGateway_TagsValueList = body_list[8].split(',')
-        VPNGateway_TagsValueList = body_list[9].split(',')
-        CustomerGateway_TagsValueList = body_list[10].split(',')
-        CustomerGateway_IpAddressList = body_list[11].split(',')
-        CustomerGateway_BgpAsnList = body_list[12].split(',')
-        # u'各種GatewayのVPCへのアタッチ'
-        VPCGatewayAttachment_InternetGatewayIdList = body_list[13].split(',')
-        VPCGatewayAttachment_VpcId_IGList = body_list[14].split(',')
-        VPCGatewayAttachment_VpnGatewayIdList = body_list[15].split(',')
-        VPCGatewayAttachment_VpcId_VPNList = body_list[16].split(',')
-        # u'DHCPオプションの作成'
-        DHCPOptions_DomainNameList = body_list[17].split(',')
-        DHCPOptions_DomainNameServersList = body_list[18].split(',')
-        DHCPOptions_ValueList = body_list[19].split(',')
-        # u'VPCへのDHCPオプションの関連付け'
-        VPCDHCPOptionsAssociation_DhcpOptionsIdList = body_list[20].split(',')
-        VPCDHCPOptionsAssociation_VpcIdList = body_list[21].split(',')
-        # u'ルートテーブルの作成'
-        RouteTable_VpcIdList = body_list[22].split(',')
-        RouteTable_TagsValueList = body_list[23].split(',')
-        # u'ルートテーブルへのGatewayの関連付け'
-        Route_GatewayIdList = body_list[24].split(',')
-        Route_RouteTableId_GWList = body_list[25].split(',')
-        # u'サブネットへのルートテーブルの関連付け'
-        SubnetRouteTableAssociation_RouteTableIdList = body_list[26].split(',')
-        SubnetRouteTableAssociation_SubnetIdList = body_list[27].split(',')
-        # u'ネットワークACLの作成'
-        NetworkAcl_TagsValueList = body_list[28].split(',')
-        NetworkAcl_VpcIdList = body_list[29].split(',')
-        # 'ネットワークACLへのルールの追加'
-        NetworkAclEntry_CidrBlockList = body_list[30].split(',')
-        NetworkAclEntry_EgressList = body_list[31].split(',')
-        NetworkAclEntry_NetworkAclIdList = body_list[32].split(',')
-        NetworkAclEntry_PortRangeFromList = body_list[33].split(',')
-        NetworkAclEntry_PortRangeToList = body_list[34].split(',')
-        NetworkAclEntry_ProtocolList = body_list[35].split(',')
-        NetworkAclEntry_RuleActionList = body_list[36].split(',')
-        NetworkAclEntry_RuleNumberList = body_list[37].split(',')
-        # 'サブネットへのネットワークACLの関連付け'
-        SubnetNetworkAclAssociation_SubnetIdList = body_list[38].split(',')
-        SubnetNetworkAclAssociation_NetworkAclIdList = body_list[39].split(',')
-        # 'セキュリティグループの作成'
-        SecurityGroup_TagsValueList = body_list[40].split(',')
-        SecurityGroup_GroupDescriptionList = body_list[41].split(',')
-        SecurityGroup_VpcIdList = body_list[42].split(',')
-        # 'セキュリティグループへのインバウンドルールの設定_ソースにIPを指定'
-        SGIngressIP_CidrIpList = body_list[43].split(',')
-        SGIngressIP_FromPortList = body_list[44].split(',')
-        SGIngressIP_ToPortList = body_list[45].split(',')
-        SGIngressIP_GroupIdList = body_list[46].split(',')
-        SGIngressIP_IpProtocolList = body_list[47].split(',')
-        # 'セキュリティグループへのインバウンドルールの設定_ソースにセキュリティグループを指定'
-        SGIngressSG_FromPortList = body_list[48].split(',')
-        SGIngressSG_ToPortList = body_list[49].split(',')
-        SGIngressSG_GroupIdList = body_list[50].split(',')
-        SGIngressSG_IpProtocolList = body_list[51].split(',')
-        SGIngressSG_SourceSecurityGroupIdList = body_list[52].split(',')
-        # 'セキュリティグループへのアウトバウンドルールの設定_宛先にIPを指定'
-        SGEgressIP_CidrIpList = body_list[53].split(',')
-        SGEgressIP_FromPortList = body_list[54].split(',')
-        SGEgressIP_ToPortList = body_list[55].split(',')
-        SGEgressIP_GroupIdList = body_list[56].split(',')
-        SGEgressIP_IpProtocolList = body_list[57].split(',')
-        # 'セキュリティグループへのアウトバウンドルールの設定_宛先にセキュリティグループを指定'
-        SGEgressSG_FromPortList = body_list[58].split(',')
-        SGEgressSG_ToPortList = body_list[59].split(',')
-        SGEgressSG_GroupIdList = body_list[60].split(',')
-        SGEgressSG_IpProtocolList = body_list[61].split(',')
-        SGEgressSG_DestinationSecurityGroupIdList = body_list[62].split(',')
-
-
+        data = response['Body'].read()
+        # パラメータシートの読み込み。
+        #　作成したパラメータシートの先頭に書いてある文字列が変数名として使用されます。
+        patrameter_list= data.splitlines()
+        for i in range(len(parameter_list)):
+               parameter =  parameter_list[i].split(',')
+               a = str(parameter[0])
+               ns = locals()
+               ns[a] = parameter
+      
+        # テンプレートの作成
         t = Template()
         t.add_version("2010-09-09")
         t.add_description("ROOP&ROOP")
-        # u'VPCの作成'
+        # VPCの作成
         if len(VPC_CidrBlockList) > 1:
             for (address,dns,value) in zip(VPC_CidrBlockList[1:],VPC_EnableDnsHostnamesList[1:],VPC_TagsValueList[1:]):
                 t.add_resource(VPC(
@@ -326,9 +255,11 @@ def lambda_handler(event, context):
                               IpProtocol=protocol,
                               DestinationSecurityGroupId=Ref(distsgid.translate(string.maketrans("", ""), "-_"))
                 ))
+        # 作成したテンプレートファイルを整形
         json_template = t.to_json()
-        bucket = s3.Bucket('cf-templates-hokan')
-        obj = bucket.Object('json-template-' + basename + ' .txt')
+        # 保存先のｓ３バケットの指定と保存処理
+        bucket = s3.Bucket(SAVE_BUCKET)
+        obj = bucket.Object('json-template-' + BASENAME  + ' .txt')
         response = obj.put(
                        Body=json_template.encode('utf-8'),
                        ContentEncoding='utf-8',
