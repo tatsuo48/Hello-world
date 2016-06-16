@@ -34,7 +34,7 @@ def lambda_handler(event, context):
 def execute_start_instance(ec2_client):
     response = ec2_client.describe_instances()
 
-    result = True
+    result = None
     for ec2_group in response['Reservations']:
         for instance_info in ec2_group['Instances']:
             ret = is_target(instance_info)
@@ -44,6 +44,7 @@ def execute_start_instance(ec2_client):
             instance_id = instance_info.get('InstanceId')
             response = ec2_client.start_instances(InstanceIds=[instance_id,])
             print response
+            result = True
     return result
 
 # 関数名 ： is_target
